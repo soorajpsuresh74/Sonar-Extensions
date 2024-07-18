@@ -1,0 +1,142 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.reflectionsinfos</groupId>
+  <artifactId>class_fix</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>sonar-plugin</packaging>
+
+  <name>Parameter checker class fix</name>
+  <description>Scan for the parameters and find the functions with too many parameters</description>
+
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <sonar.api.version>9.14.0.375</sonar.api.version>
+    <sonar.python.version>3.24.1.11916</sonar.python.version>
+    <sonar.testing.harness.version>9.5.0.56709</sonar.testing.harness.version>
+    <sonar.junit.version>4.13.2</sonar.junit.version>
+    <sonar.assertj.version>3.19.0</sonar.assertj.version>
+    <sonar.mockito.version>4.6.1</sonar.mockito.version>
+    <sonar.plugin.packaging.version>1.23.0.740</sonar.plugin.packaging.version>
+    <sonar.mojo.version>2.0.1</sonar.mojo.version>
+  </properties>
+
+<!--  <repositories>-->
+<!--    <repository>-->
+<!--      <id>Central</id>-->
+<!--      <name>Maven central repo</name>-->
+<!--      <url>https://repo.maven.apache.org/maven2</url>-->
+<!--    </repository>-->
+<!--    <repository>-->
+<!--      <id>sonarsource</id>-->
+<!--      <url>https://repox.jfrog.io/artifactory/sonarsource/</url>-->
+<!--    </repository>-->
+<!--    <repository>-->
+<!--      <id>sonarsource1</id>-->
+<!--      <url>https://repo1.maven.org/maven2/</url>-->
+<!--    </repository>-->
+<!--  </repositories>-->
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.sonarsource.python/sonar-python-plugin -->
+    <dependency>
+      <groupId>org.sonarsource.python</groupId>
+      <artifactId>sonar-python-plugin</artifactId>
+      <version>${sonar.python.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.api.plugin</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>${sonar.api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Testing Harness -->
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-testing-harness</artifactId>
+      <version>${sonar.testing.harness.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${sonar.junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- AssertJ -->
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${sonar.assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Mockito -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${sonar.mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Python Checks TestKit -->
+    <dependency>
+      <groupId>org.sonarsource.python</groupId>
+      <artifactId>python-checks-testkit</artifactId>
+      <version>4.19.0.15616</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+  <build>
+    <plugins>
+      <!-- SonarQube Plugin Packaging -->
+      <plugin>
+        <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+        <artifactId>sonar-packaging-maven-plugin</artifactId>
+        <version>${sonar.plugin.packaging.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <pluginKey>TooManyParameters</pluginKey>
+          <pluginClass>com.reflectionsinfos.TooManyParameters</pluginClass>
+          <pluginApiMinVersion>9.5</pluginApiMinVersion>
+          <requirePlugins>python:${sonar.python.version}</requirePlugins>
+          <skipDependenciesPackaging>true</skipDependenciesPackaging>
+        </configuration>
+      </plugin>
+      <!-- Maven Compiler Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <release>17</release>
+        </configuration>
+      </plugin>
+      <!-- Native2Ascii Plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>native2ascii-maven-plugin</artifactId>
+        <version>${sonar.mojo.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
